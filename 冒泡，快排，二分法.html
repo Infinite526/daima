@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 冒泡排序：（应用于数据规模很小）
+// 冒泡通俗讲就是参与排序的数据就像水中的气泡慢慢浮出水面一样“浮”到数列顶端。
+// 冒泡排序要点：
+// 1、  两层循环，外层循环控制走访数列重复进行的次数，内层循环进行数据的比较、交换，是数据“上浮”。
+// 2、  内层循环是相邻的数据进行比较。
+// 比如：有一个数组arr=[1,5,8,2,4,9]，内层循环就是1跟5比，然后5跟8比，，，，，就这样一直比。
+var arr = [9, 2, 4, 1, 8];
+    function bubbleSort(arr) {
+        var i = arr.length;
+        var j;
+        var temp;
+        while (i > 0) {
+            for (j = 0; j < i - 1; j++) {
+                console.log(arr[j],arr[j+1]);//检测如何冒泡的
+                console.log("------------");
+                if (arr[j] > arr[j + 1]) {
+                    temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+            console.log("i===="+i);
+            i--;
+        }
+        return arr;
+    }
+    bubbleSort(arr)
+// 数组外循环次数就为数组长度。每一次外循环在内循环两两比较后，得到一个最大的值排到数组尾部。
+
+// 快速排序：快速排序思想:
+// 　　1 先找数组的最中间的一个数为基准
+// 　　2 把数组通过此基准分为小于基准的left数组和大于基准的right数组,
+// 　　3 递归重复上面的两个步骤,
+var arr = [90,9,12,6,30,60,36,32,40];
+function quickSort(arr){
+    if (arr.length <= 1) { return arr; }
+    var pivotIndex = Math.floor(arr.length / 2); //取基值的下标
+    var pivot = arr.splice(pivotIndex, 1)[0];    //拿到基值
+    var left = [];  //定义一个左数组
+        var right = [];//定义一个右数组
+        for (var i = 0; i < arr.length; i++){
+            if (arr[i] < pivot) {
+                left.push(arr[i]); //左边数组
+            } else {
+                right.push(arr[i]);
+            }
+        }
+        return quickSort(left).concat([pivot], quickSort(right));
+
+}
+quickSort(arr)
+// 分组，找一个基准，小的数放左边，大的数放右边，依次分组直到数组元素为一
+// 排序算法中：
+// 不稳定：快速排序，选择排序，堆排序，希尔排序（快选堆希）
+// 稳定：插入排序，冒泡排序，归并排序，基数排序（插冒归基）
+// 算法的稳定性判断：排序前2个相等的数在序列中的前后位置顺序与排序后它们两个的前后位置顺序相同
+
+// JS二分法查找 
+// 二分法查找算法：
+// 采用二分法查找时，数据需是排好序的。
+// 主要思想是：（设查找的数组区间为array[s, e]）
+// （1）确定该区间的中间位置m
+// （2）将查找的值T与array[m]比较,若相等，查找成功返回此位置；否则确定新的查找区域，继续二分查找。
+// 区域确定如下：
+// 这里设array从小到大排列,
+// array[m]>T由数组的有序性可知array[m,……,e]>T;
+// 故新的区间为array[s,……，m-1],
+// 类似上面查找区间array[s,……，m-1]。
+// 每一次查找与中间值比较，判断是否查找成功，不成功当前查找区间缩小一半，循环查找，即可。
+// 时间复杂度:O(log2n)。  
+ function getIndex(arr,num){
+    var len = arr.length,
+        st  = 0,
+        end = len-1
+        while(st<=end){
+        var mid = Math.floor((st+end)/2)
+        if(num==arr[mid]){
+            return mid
+        }else if(num>arr[mid]){
+            st = mid+1
+        }else{
+            end = mid-1
+        }
+    }
+    return arr;
+}
+
+var ary=[1,4,7,8,12,34,67,88,99,100]
+
+console.log(getIndex(ary,12))
+    </script>
+</body>
+
+</html>

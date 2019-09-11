@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+//  一.  js的sort()方法
+//  sort() 方法用于对数组的元素进行排序，同时需要一个额外的排序函数sortNumber()
+ 
+ function sortNumber(a,b){
+ 
+     return a - b
+ 
+ }
+ 
+ var arr = [1, 1000, 100]
+ 
+ arr.sort(sortNumber)
+ 
+//  二.  冒泡排序（从后向前）
+//  重复地走访过要排序的元素列，依次比较两个相邻的元素，如果他们的顺序（如从大到小、首字母从A到Z）错误就把他们交换过来。走访元素的工作是重复地进行直到没有相邻元素需要交换，也就是说该元素已经排序完成。
+ 
+ function sortArray(arr){
+ 
+     for(var j=0;j<arr.length-1;j++){
+ 
+     // 两两比较，如果前一个比后一个大，则交换位置。     
+ 
+         for(var i=0;i<arr.length-1-j;i++){
+ 
+             if(arr[i]>arr[i+1]){
+ 
+                 var temp = arr[i];
+ 
+                 arr[i] = arr[i+1];
+ 
+                 arr[i+1] = temp;
+ 
+             }
+ 
+         }
+ 
+     }
+ 
+ }
+ 
+//  三.  选择排序
+//  每一次从待排序的数据元素中选出最小（或最大）的一个元素，存放在序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到全部待排序的数据元素排完。
+ 
+ function sortArray(arr){
+ 
+     for(var i=0;i<arr.length;i++){
+ 
+         // 设置当前范围最小值和索引        
+ 
+         var min = arr[i];
+ 
+         var minIndex = i;
+ 
+         // 在该范围选出最小值        
+ 
+         for(var j=i+1;j<arr.length;j++){
+ 
+             if(min>arr[j]){
+ 
+                 min = arr[j];
+ 
+                 minIndex = j;
+ 
+             }
+ 
+         }
+ 
+         // 将最小值插入,并将原来位置的最小值删除   
+ 
+         arr.splice(i,0,min);
+ 
+         arr.splice(minIndex+1,1);
+ 
+     }
+ 
+ }
+ 
+//  四.  插入排序
+//  每一步将一个待排序的记录，插入到前面已经排好序的有序序列中去，直到插完所有元素为止。
+ 
+ function sortArray(arr){
+ 
+ // 假设第0元素是有序序列，第1元素之后是无序的序列。从第1元素开始依次将无序序列的元素插入到有序序列中
+ 
+     for(var i=1; i<arr.length;i++){
+ 
+         if(arr[i]<arr[i-1]){
+ 
+             // 取出无序序列中需要插入的第i个元素            
+ 
+             var temp = arr[i];
+ 
+             // 定义有序中的最后一个位置            
+ 
+             var j = i-1;
+ 
+             arr[i] = arr[j];
+ 
+             // 比较大小，找到插入的位置            
+ 
+             while(j>=0&&temp<arr[j]){
+ 
+                 arr[j+1] = arr[j];
+ 
+                 j--;
+ 
+             };
+ 
+             // 插入           
+ 
+             arr[j+1] = temp;
+ 
+         }
+ 
+     }
+ 
+   }
+    </script>
+</body>
+</html>

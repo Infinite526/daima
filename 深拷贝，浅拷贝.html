@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>深拷贝，浅拷贝</title>
+</head>
+
+<body>
+    <script>
+        // 浅拷贝 赋值操作
+        // 深拷贝
+        // 数组
+        // 生成新数组
+        let arr1 = [1, 2, 3];
+        let [...arr2] = arr1;
+        // 
+        let arr1 = [1, 2, 3];
+        let arr2 = Array.from(arr1);
+        // 对象
+        // 使用JSON比较简单，但是JSON的深拷贝方式会忽略函数对象和原型对象
+        let obj1 = { count: 1, name: 'grace', age: 1 };
+        let obj2 = JSON.parse(JSON.stringify(obj1));
+        // 
+        let obj1 = { count: 1, name: 'grace', age: 1 };
+        let { ...obj2 } = obj1;
+        // 综合版，递归
+        function deepCopy(obj){
+            let result = Array.isArray(obj)?[]:{};
+            if(obj && typeof obj === 'object'){
+                for(let key in obj){
+                    if(obj.hasOwnProperty(key)){
+                        if(obj[key] && typeof obj[key] === 'object' ){
+                            result[key]=deepCopy(obj[key]);
+                        }else{
+                            result[key]=obj[key];
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+    </script>
+</body>
+
+</html>

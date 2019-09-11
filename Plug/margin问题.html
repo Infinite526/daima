@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>margin和元素之间的问题</title>
+    <style>
+    .div{
+            width: 100px;
+            height: 50px;
+            background: rgb(9, 255, 0);
+        }
+        .div1 {
+            width: 300px;
+            height: 300px;
+            background: #f09;
+            /* padding: 5%; */
+            /* margin: 10%; */
+        }
+
+        .div2 {
+            width: 200px;
+            height: 200px;
+            background: #ff0;
+            padding: 2%;
+            margin: 30%;
+        }
+    </style>
+</head>
+<body>
+    <!-- 当子元素的margin+width超过父元素的高度的时候，margin会超出父元素，会顶起父元素的上面兄弟元素 -->
+    <div class="div">
+
+    </div>
+    <div class="div1">
+        <div class="div2">
+
+        </div>
+    </div>
+</body>
+</html>

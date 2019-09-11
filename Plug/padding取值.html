@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>margin,padding,top,left根据父元素宽取值</title>
+    <style>
+        .div{
+            width: 600px;
+            height: 500px;
+            background: rgb(9, 255, 0);
+        }
+        .div1 {
+            width: 400px;
+            height: 300px;
+            background: #f09;
+            padding: 5%;
+            margin: 10%;
+        }
+
+        .div2 {
+            width: 200px;
+            height: 100px;
+            background: #ff0;
+            padding: 2%;
+            margin: 20%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='div'>
+        <div class='div1'>
+            <div class='div2'></div>
+        </div>
+    </div>
+</body>
+
+</html>

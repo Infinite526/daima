@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // let a = {
+        //     q: 1,
+        //     b: {
+        //         q: 2,
+        //         c: {
+        //             q: 3,
+        //             d: function() {
+        //                 console.log(this.q)
+        //             }
+        //         }
+        //     }
+        // }
+        // a.b.c.d() // 3
+        // let f = a.b.c.d
+        // f() //undefined  f作用于全局 全局中无q值
+
+        let a = {
+            q: 1,
+            b: {
+                q: 2,
+                c: {
+                    q: 3,
+                    d: () => {
+                        console.log(this.q)
+                    }
+                }
+            }
+        }
+        a.b.c.d() // undefined
+        let f = a.b.c.d
+        f() //undefined  f作用于全局 全局中无q值
+    </script>
+</body>
+
+</html>

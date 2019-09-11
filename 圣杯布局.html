@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        header,
+        footer {
+            width: 100%;
+            height: 80px;
+            background: #f18;
+        }
+        
+        .wrap {
+            padding: 0 100px;
+            overflow: hidden;
+        }
+        
+        .main {
+            width: 100%;
+            height: 200px;
+            float: left;
+            position: relative;
+            background: #f00;
+        }
+        
+        .left {
+            width: 100px;
+            height: 200px;
+            float: left;
+            position: relative;
+            left: -100px;
+            margin-left: -100%;
+            background: #9ff;
+        }
+        
+        .right {
+            width: 100px;
+            height: 200px;
+            float: left;
+            position: relative;
+            margin-left: -100px;
+            left: 100px;
+            background: #f0a;
+        }
+    </style>
+</head>
+
+<body>
+    <header>header</header>
+    <section class='wrap'>
+        <section class='main'></section>
+        <section class='left'></section>
+        <section class='right'></section>
+    </section>
+    <footer>footer</footer>
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="author" content="bigblackwang">
+    <title>五子棋</title>
+</head>
+<body>
+    <div id="container"></div>
+    
+    <script>
+        // 棋子
+        var points = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 2, 1, 0, 0, 0],
+            [0, 0, 0, 1, 2, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+
+        var container = document.getElementById('container');
+        var whoFirst = 1;
+        container.style = "margin-left: 50%;margin-top: 10%;transform: translateX(-50%);width: 416px;border: 2px solid #333;";
+        for (let y = 0; y < 8; y++) {
+            let ycolumn = document.createElement('div');
+            ycolumn.style = "display: inline-block;vertical-align: bottom;height: 50px;background-color: green;border: 1px solid #fff;"
+            container.appendChild(ycolumn);
+            for (let x = 0; x < 8; x++) {
+                let xrow = document.createElement('div');
+                xrow.style = "display: inline-block;vertical-align: bottom;width: 50px;height: 50px;border-left: 1px solid #fff;border-right: 1px solid #fff;cursor: pointer;"
+                ycolumn.appendChild(xrow);
+                let nowPoint = points[y][x];
+                if (3 - nowPoint === 1) {
+                    let point = document.createElement('div');
+                    point.style = "width: 40px;height: 40px;margin-top: 5px;margin-left: 5px;background-color: #fff;border-radius: 50%;";
+                    xrow.appendChild(point);
+                } else if (3 - nowPoint === 2) {
+                    let point = document.createElement('div');
+                    point.style = "width: 40px;height: 40px;margin-top: 5px;margin-left: 5px;background-color: #000;border-radius: 50%;";
+                    xrow.appendChild(point);
+                } else {
+                    xrow.addEventListener('click', () => {
+
+                        function render (x, y) {
+                            points[y][x] = whoFirst;
+                            let point = document.createElement('div');
+                            point.style = "width: 40px;height: 40px;margin-top: 5px;margin-left: 5px;border-radius: 50%;";
+                            point.style.backgroundColor = (whoFirst === 1 ? '#000' : '#fff');
+                            xrow.appendChild(point);
+                            whoFirst = 3 - whoFirst; // 切换走子方，1：黑棋，2：白棋
+                        }
+
+                        // 如果左右互不相连，直接落子
+                        if (
+                            7 > x, y > 0
+                            && points[y][x-1] === 0 
+                            && points[y][x+1] === 0 
+                            && points[y-1][x] === 0
+                            && points[y][x+1] === 0
+                            && points[y-1][x-1] === 0
+                            && points[y+1][x-1] === 0
+                            && points[y-1][x+1] === 0
+                            && points[y+1][x+1] === 0
+                        ) { 
+                            render(x, y);
+                        } else {
+                        // 如果关联了，则判断是否是同类型，如果是同类型，直接落子
+                        // 如果不同类型则判断是否看吃子
+                            while (--x >= 0 && --y >= 0) {
+                                if (points[y][x] == 0) {
+                                    
+                                }
+                            }
+                            while (x++ < 8 && y++ < 8) {
+
+                            }
+                        }
+
+                    });
+                }
+            }
+        }
+
+    </script>
+</body>
+</html>

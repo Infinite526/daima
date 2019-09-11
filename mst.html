@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mst</title>
+    <style>
+        .container1 {
+            position: relative;
+            box-sizing: border-box;
+            padding: 0 150px 0 200px;
+            width: 100%;
+            height: 300px;
+            background-color: bisque;
+        }
+
+        .container1 > .left {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 200px;
+            height: 90%;
+            background-color: aqua;
+        }
+
+        .container1 > .center {
+            width: 100%;
+            height: 90%;
+            background-color: red;
+        }
+
+        .container1 > .right {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 150px;
+            height: 90%;
+            background-color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <div title="双飞翼布局1" class="container1">
+        <div class="left"></div>
+        <div class="center"></div>
+        <div class="right"></div>
+    </div>
+    <script>
+        // 说出几种布局方式
+        /**
+         *  flex 
+         *  grid
+         */
+        // 手写call，apply，bind
+        Function.prototype.call = function (context) {
+            const ctx = context || window;
+            ctx.func = this;
+            const args = Array.from(arguments).slice(1);
+            const res = arguments.length > 1 ? ctx.func(...args) : ctx.func();
+            delete ctx.func;
+            return res;
+        }
+
+        Function.prototype.apply = function (context) {
+            const ctx = context || window;
+            ctx.func = this;
+            const res = arguments[1] ? ctx.func(...arguments[1]) : ctx.func();
+            delete ctx.func;
+            return res;
+        }
+
+        Function.prototype.bind = function (context) {
+            const ctx = JSON.parse(JSON.stringify(context)) || window;
+            ctx.func = this;
+            const args = Array.from(arguments).slice(1);
+            return function () {
+                const allArgs = args.concat(Array.from(arguments));
+                return allArgs.length > 0 ? ctx.func(...allArgs) : ctx.func();
+            }
+        }
+
+        // 手写一个快速排序
+        function quickSort (arr = []) {
+            // 如果数组长度不大于1，返回原数组
+            if (arr.length <= 1) {
+                return arr;
+            }
+            // 找一个基准
+            var pivotIndex = Math.floor(arr.length / 2);
+            // 把基准从原数组删除
+            var pivot = arr.splice(pivotIndex, 1)[0];
+            var left = [], right = [];
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] <= pivot) {
+                    left.push(arr[i]);
+                } else {
+                    right.push(arr[i]);
+                }
+            }
+            return quickSort(left).concat([pivot], quickSort(right));
+        }
+
+        // 手写一个冒泡
+        function bubbleSort (arr) {
+            for (var i = 0; i < arr.length; i++) {
+                for (var j = 0; j < arr.length; j++) {
+                    // 获取第一个值和后一个值对比较
+                    var cur = arr[i];
+                    if (cur > arr[j]) {
+                        var index = arr[j];
+                        arr[j] = cur;
+                        arr[i] = index;
+                    }
+                }
+            }
+            return arr;
+        }
+        
+        // 手写一个二分搜索法
+        function binarySearchByWhile (arr, key) {
+            var length = arr.length,
+                start = 0,
+                end = length - 1,
+                mid;
+            
+            while (start < end) {
+                mid = Math.floor((start + end) / 2);
+                if (arr[mid] === key) {
+                    return mid;
+                } else if (arr[mid] < mid) {
+                    start = mid + 1;
+                } else {
+                    end = mid - 1;
+                }
+            }
+            return false
+        }
+
+        function binarySearchByReturn (arr, key, start, end) {
+            var length = arr.length,
+                start = start || 0,
+                end = end || length - 1,
+                mid = Math.floor((start + end) / 2);
+            
+            if (arr[mid] === key) {
+                return mid;
+            } else if (arr[mid] > key) {
+                return binarySearchByReturn(arr, key, start, mid - 1);
+            } else {
+                return binarySearchByReturn(arr, key, mid + 1, end);
+            }
+        }
+
+        // 手写一个二叉树排序
+        function TreeNode (data, left, right) {
+            this.val = data;
+            this.left = left;
+            this.right = right;
+        }
+
+        function BST () {
+            this.root = null;
+            this.insert = function (data) {
+                var newNode = new TreeNode(data, null, null);
+                if (!this.root) {
+                    this.root = newNode;
+                } else {
+                    this.insertNode(this.root, newNode);
+                }
+            }
+            this.insertNode = function (root, newNode) {
+                if (newNode.val < root.val) {
+                    if (root.left === null) {
+                        root.left = newNode;
+                        return
+                    }
+                    this.insertNode(root.left, newNode);
+                } else {
+                    if (root.right === null) {
+                        root.right = newNode;
+                        return
+                    }
+                    this.insertNode(root.right, newNode);
+                }
+            }
+        }
+
+        // 查询二叉树中是否包含某个字段
+        // 创建一个二叉树实例
+        var bst = new BST();
+        bst.insert(12);
+        bst.insert(5);
+        bst.insert(17);
+        bst.insert(4);
+        bst.insert(6);
+        bst.insert(30);
+        console.log(bst)
+
+        var queryNode = 6;
+
+        function queryNodeFromBST (tree, node) {
+            
+        }
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="page"></div>
+    <script>
+        const ELEMENT = document.querySelector('#page');
+        export class BaseRouter {
+            constructor(list) {
+                this.list = list;
+            }
+            render(state) {
+                let ele = this.list.find(ele => ele.path === state);
+                ele = ele ? ele : this.list.find(ele => ele.path === '*')
+                ELEMENT.innerText = ele.component;
+            }
+        }
+        // hash
+        // extends  继承后面父元素的属性和方法
+        export class HaseRouter extends BaseRouter {
+            constructor(list) {
+                    super(list) //super代表父类的构造函数
+                    this.handle();
+                    //监听hash变化事件,hash变化重新渲染  
+                    window.addEventListener('hashchange', e => {
+                        this.handle();
+                    })
+                }
+                // https://segmentfault.com/#/a/1190000017853553
+                // window.location.hash
+                // "#/a/1190000017853553"
+            getState() {
+                    const hash = window.location.hash;
+                    return hash ? hash.slice(1) : '/' // /a/1190000017853553
+                }
+                //获取完整url
+            getUrl(path) {
+                    const href = window.location.href;
+                    const i = href.indexOf('#');
+                    const base = i >= 0 ? href.slice(0, i) : href;
+                    return `${base}#${path}`;
+                }
+                //改变hash值 实现压入 功能
+            push(path) {
+                    window.location.hash = path;
+                }
+                //使用location.replace实现替换 功能 
+            replace(path) {
+                    window.location.replace(this.getUrl(path));
+                }
+                //这里使用history模式的go方法进行模拟 前进/后退 功能
+            go(n) {
+                window.history.go(n);
+            }
+        }
+        // history
+        export class HistoryRouter extends BaseRouter {
+            constructor(list) {
+                    super(list);
+                    this.handler();
+                    //监听历史栈信息变化,变化时重新渲染
+                    window.addEventListener('popstate', e => {
+                        this.handler();
+                    });
+                }
+                //渲染
+            handler() {
+                    this.render(this.getState());
+                }
+                //获取路由路径
+            getState() {
+                    const path = window.location.pathname;
+                    return path ? path : '/';
+                }
+                //使用pushState方法实现压入功能
+                //PushState不会触发popstate事件,所以需要手动调用渲染函数
+            push(path) {
+                    history.pushState(null, null, path);
+                    this.handler();
+                }
+                //使用replaceState实现替换功能  
+                //replaceState不会触发popstate事件,所以需要手动调用渲染函数
+            replace(path) {
+                history.replaceState(null, null, path);
+                this.handler();
+            }
+            go(n) {
+                window.history.go(n);
+            }
+        }
+        export const ROUTELIST = [{
+            path: '/',
+            name: 'index',
+            component: 'This is index page'
+        }, {
+            path: '/hash',
+            name: 'hash',
+            component: 'This is hash page'
+        }, {
+            path: '/history',
+            name: 'history',
+            component: 'This is history page'
+        }, {
+            path: '*',
+            name: 'notFound',
+            component: '404 NOT FOUND'
+        }];
+    </script>
+</body>
+
+</html>

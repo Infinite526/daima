@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>手写promise</title>
+</head>
+
+<body>
+    <script>
+        class Promise {
+            constructor(exector) {
+                this.state = 'pending';
+                this.value = undefined;
+                this.reason = undefined;
+                let resolve = value => {
+                    if (this.state === 'pending') {
+                        this.state = 'fulfilled';
+                        this.value = value;
+                    }
+                };
+                let reject = reason => {
+                    if (this.state === 'pending') {
+                        this.state = 'rejected';
+                        this.reason = reason;
+                    }
+                };
+                try {
+                    executor(resolve, reject);
+                } catch (err) {
+                    reject(err)
+                }
+            }
+            then(onFulfilled, onReject) {
+                if (state === 'fulfilled') {
+                    onFulfilled(this.value)
+                }
+                if (state === 'rejected') {
+                    onReject(this.reason)
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

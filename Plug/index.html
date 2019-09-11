@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: relative;
+            margin: 100px auto 0;
+            width: 300px;
+            height: 200px;
+            background: black;
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+
+<script src="./index.js"></script>
+<script>
+    const id = 'box';
+    const src = 'http://gfs16.atguat.net.cn/T1a0C_BgJT1RCvBVdK.jpg';
+    // const src = 'https://imgsa.baidu.com/forum/w%3D580%3B/sign=7acd5f14d9ca7bcb7d7bc7278e326963/b17eca8065380cd799e0c43aaf44ad345882816e.jpg'
+
+    new ImgPlug(id, src, 'cutOut');
+</script>
+</body>
+</html>

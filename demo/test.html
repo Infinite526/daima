@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:svg="./test11.svg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <meta http-equiv="Page-Enter" content="revealTrans(duration=2, transition=7)">
+    <meta http-equiv="Page-Exit" content="revealTrans(duration=2, transition=8)"> -->
+    <!-- <meta http-equiv="Refresh" content="5;https://www.baidu.com.cn"> -->
+    <title>Document</title>
+    <style>
+        .content {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            padding: 5px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background-color: grey;
+        }
+
+        .borderBox {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-content: space-between;
+            width: 100%;
+            height: 100px;
+        }
+
+        .box {
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100%;
+            border: 5px solid grey;
+            background-color: pink;
+        }
+
+        .clickBox {
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100%;
+            border: 5px solid grey;
+            border-radius: 50%;
+            background-color: red;
+        }
+        
+        .boxName {
+            font-size: 16px;
+            font-weight: bold;
+            color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <embed src="./test11.svg" width="80" height="80" type="image/svg+xml">
+    <object data="./test11.svg" width="80" height="80" type="image/svg+xml"></object>
+    <iframe src="./test11.svg" width="80" height="80" frameborder="0"></iframe>
+
+    <div class="content">
+        <div class="borderBox">
+            <div class="box" proindex="0"><span class="boxName"></span></div>
+            <div class="box" proindex="1"><span class="boxName"></span></div>
+            <div class="box" proindex="2"><span class="boxName"></span></div>
+        </div>
+        <div class="borderBox">
+            <div class="box" proindex="7"><span class="boxName"></span></div>
+            <div class="clickBox" onclick="clickFn()"><span class="boxName">点击抽奖</span></div>
+            <div class="box" proindex="3"><span class="boxName"></span></div>
+        </div>
+        <div class="borderBox">
+            <div class="box" proindex="6"><span class="boxName"></span></div>
+            <div class="box" proindex="5"><span class="boxName"></span></div>
+            <div class="box" proindex="4"><span class="boxName"></span></div>
+        </div>
+    </div>
+    
+    <script>
+        
+        function getIndex (arr, num) {
+            var len = arr.length,
+            st = 0,
+            end = len - 1;
+            while (st <= end) {
+                var mid = Math.floor((st + end) / 2);
+                if (num == arr[mid]) {
+                    return mid
+                } else if (num > arr[mid]){
+                    st = mid + 1;
+                } else {
+                    end = mid - 1;
+                }
+            }
+            return arr;
+        }
+
+        var ary=[1,4,7,8,12,34,67,88,99,100]
+        console.log(getIndex(ary,12))
+        
+        // 接口返回抽奖内容
+        var apiData = [
+            {
+                name: '方便面',
+                price: '¥0.1'
+            },
+            {
+                name: '手机',
+                price: '¥0.2'
+            },
+            {
+                name: '水杯',
+                price: '¥0.3'
+            },
+            {
+                name: '女朋友',
+                price: '¥0.4'
+            },
+            {
+                name: '男朋友',
+                price: '¥0.5'
+            },
+            {
+                name: '洗发水',
+                price: '¥0.6'
+            },
+            {
+                name: '糖果',
+                price: '¥0.7'
+            },
+            {
+                name: '电脑',
+                price: '¥0.8'
+            }
+        ]
+        
+        // apiData length
+        var apiLen = apiData.length;
+
+        // 接口返回中奖下标
+        var apiIndex = null;
+            
+        //获取新的中奖位置
+        function getNewApiIndex () {
+            const newIndex = Math.floor(Math.random(0,1) * 10);
+            if (newIndex >= 7) {
+                apiIndex = 7;
+            } else {
+                apiIndex = newIndex;
+            }
+        }
+
+        // 页面初始位置、中奖重置位置
+        var pageGetIndex = 0;
+        
+        // 奖品box
+        var items = document.getElementsByClassName('box');
+        var sortItems = [];
+        for (const key in items) {
+            if (items.hasOwnProperty(key)) {
+                const proindex = items[key].attributes.proindex.value;
+                sortItems[proindex] = items[key];
+                sortItems[proindex].innerHTML = apiData[proindex].name;
+            }
+        }
+        
+        // 获取到达奖品的总步长
+        function getStepNum () {
+            if (pageGetIndex > apiIndex) {
+                return 3 * apiLen - (pageGetIndex - apiIndex);
+            } else if (pageGetIndex == apiIndex) {
+                return 2 * apiLen;
+            } else {
+                return 2 * apiLen + (apiIndex - pageGetIndex);
+            }
+        }
+
+        var isClick = false;
+        
+        // 每次点击抽奖的方法
+        function clickFn () {
+            if (isClick) {
+                return false
+            }
+            isClick = true;
+            getNewApiIndex(); 
+            var stepnum = getStepNum();
+            var apiLen = apiData.length;
+            sortItems[pageGetIndex].style.backgroundColor = 'pink';
+            for (let i = 0; i < stepnum; i++) {
+                void function (i) {
+                    setTimeout(() => {
+                        let stepindex = (i + pageGetIndex) % apiLen;
+                        if (stepindex == 0) {
+                            sortItems[apiLen - 1].style.backgroundColor = 'pink';
+                        } else {
+                            sortItems[stepindex - 1].style.backgroundColor = 'pink';
+                        }
+                        sortItems[stepindex].style.backgroundColor = 'red';
+                        if (i == (stepnum - 1)) {
+                            setTimeout(() => {
+                                alert(`恭喜你获得了‘${sortItems[stepindex].innerHTML}’`)
+                                isClick = false;
+                            }, 120);
+                            pageGetIndex = (pageGetIndex + stepnum) % apiLen;
+                        }
+                    }, i * 120);
+                }(i);
+            }
+        }
+    </script>
+</body>
+</html>
+
+<!-- 
+    大转盘思路：
+        1、9个各自，依次排列，最中间的不可以加入循环
+            需要重排数组顺序
+        2、转盘需要循环两圈以上，三圈以内
+            需要判断当前是第几圈
+        3、当刚好转够两圈时，距离奖品还有几步
+            确定两圈后还有几步到达奖品
+        4、两圈后放缓转速
+            判断为两圈后，duration长度增加
+        5、达到奖品后弹出奖励提示
+        6、奖品位置为下次转盘的起始位置
+            到达奖品后更新起始位置
+        7、循环以上逻辑
+ -->
