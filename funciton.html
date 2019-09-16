@@ -32,14 +32,6 @@
         // VM59:3 10
         // VM59:5 5
         // VM59:7 20
-        function processString(s) {
-            var arr = s.split('');
-            var new_arr = arr.map((item) => {
-                return item === item.toUpperCase() ? item.toLowerCase() : item.toUpperCase();
-            });
-            return new_arr.join('');
-        }
-        console.log(processString('AbC'));
     </script>
 </body>
 
