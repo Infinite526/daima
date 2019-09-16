@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //{1:222, 2:123, 5:888}，请把数据处理为如下结构：[222, 123, null, null, 888, null, null, null, null, null, null, null]
+        let obj = {
+            1: 222,
+            2: 123,
+            5: 888
+        };
+        const result = Array.from({
+            length: 12
+        }).map((_, index) => obj[index + 1] || null); //obj[1] = 222,obj[5] = 888,
+        console.log(result)
+
+        // 把两个数组 [A1, A2, B1, B2, C1, C2, D1, D2] 和 [A, B, C, D]，合并为 [A1, A2, A, B1, B2, B, C1, C2, C, D1, D2, D]。
+        let a1 = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2']
+        let a2 = ['A', 'B', 'C', 'D'].map((item) => {
+            return item + 3
+        })
+
+        let a3 = [...a1, ...a2].sort().map((item) => {
+            if (item.includes('3')) {
+                return item.split('')[0]
+            }
+            return item
+        })
+
+        // 如何把一个字符串的大小写取反（大写变小写小写变大写），例如 ’AbC' 变成 'aBc' 
+        function processString(s) {
+            var arr = s.split('');
+            var new_arr = arr.map((item) => {
+                return item === item.toUpperCase() ? item.toLowerCase() : item.toUpperCase();
+            });
+            return new_arr.join('');
+        }
+        console.log(processString('AbC'));
+    </script>
+</body>
+
+</html>
