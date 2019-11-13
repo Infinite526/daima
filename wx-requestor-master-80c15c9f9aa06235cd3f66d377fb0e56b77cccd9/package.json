@@ -1,0 +1,29 @@
+{
+  "name": "wx-requestor",
+  "version": "1.0.0",
+  "description": "a requestor base promist",
+  "main": "src/index.js",
+  "scripts": {
+    "build:lib": "webpack --mode production",
+    "build": "npm run test && npm run build:lib",
+    "dev:lib": "webpack --mode development",
+    "dev": "npm run test && npm run dev:lib",
+    "test": "jest --config config/jest.config.js"
+  },
+  "author": "bearbad",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-loader": "^2.1.2",
+    "jest": "^24.8.0",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.6"
+  }
+}

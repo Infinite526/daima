@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=scr, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // var obj = {
+        //     hi: function() {
+        //         console.log(this);
+        //         return () => {
+        //             console.log(this);
+        //         }
+        //     },
+        //     sayHi: function() {
+        //         return function() {
+        //             console.log(this);
+        //             return () => {
+        //                 console.log(this);
+        //             }
+        //         }
+        //     },
+        //     say: () => {
+        //         console.log(this);
+        //     }
+        // }
+        // let hi = obj.hi(); //输出obj对象
+        // hi(); //输出obj对象
+        // let sayHi = obj.sayHi();
+        // let fun1 = sayHi(); //输出window
+        // fun1(); //输出window
+        // obj.say();
+        // var getId = (function() {    
+        //     "use strict";
+        //     var i = 0;  
+        //     return function() {    
+        //         return i++;  
+        //     };   
+        // })();
+
+
+        // console.log(getId());
+        // console.log(getId());
+        Function.prototype.a = () => alert(1);
+        Object.prototype.b = () => alert(2);
+
+        function A() {};
+        const a = new A();
+        a.a();
+        a.b();
+    </script>
+</body>
+
+</html>

@@ -21,9 +21,9 @@
 
         // foo(10)  //Window undefined 10
         foo.call(bar, 10) //{sex: "男"} "男" 10
-        // 通过call方法调用foo函数，会立即执行foo函数，同时this会指向传递的第一个参数bar，第二个或后边的以参数的形式传递给foo函数
-        // 当调用foo函数时，如果属性或方法没有找到，会向原型链上查找，foo构造函数的__proto__指向的是Function.prototype对象，所以我们在模拟call方法时，可以给Function的原型添加方法。
-        // foo调用myCall方法 等同于给bar添加一个fn属性，而fn属性又对应一个foo方法，然后就是调用fn方法。如：
+            // 通过call方法调用foo函数，会立即执行foo函数，同时this会指向传递的第一个参数bar，第二个或后边的以参数的形式传递给foo函数
+            // 当调用foo函数时，如果属性或方法没有找到，会向原型链上查找，foo构造函数的__proto__指向的是Function.prototype对象，所以我们在模拟call方法时，可以给Function的原型添加方法。
+            // foo调用myCall方法 等同于给bar添加一个fn属性，而fn属性又对应一个foo方法，然后就是调用fn方法。如：
 
         function bar() {
             this.sex = "男";
@@ -38,31 +38,64 @@
         // 删除bar的fn属性（只是删除fn属性，但this已经指向了传入的那个对象），并返回结果
         //call
         // Array.from()方法就是将一个类数组对象或者可遍历对象转换成一个真正的数组。
-        Function.prototype.call = function (context) {
-            const ctx = context || window;//如果有上下文就是上下文，没有则是window
+        Function.prototype.call = function(context) {
+            const ctx = context || window; //如果有上下文就是上下文，没有则是window
             cxt.func = this;
             const args = Array.from(arguments).slice(1);
             const res = arguments.length > 1 ? ctx.func(...args) : cxt.func();
             delete ctx.func;
             return res;
         }
-        Function.prototype.apply = function (context) {
+        Function.prototype.apply = function(context) {
             const ctx = context || window;
             ctx.func = this;
             const res = arguments[1] ? cxt.func(...arguments[1]) : cxt.func();
             delete cxt.func;
             return res;
         }
-        Function.prototype.bind = function (context) {
-            const cxt = JSON.parse(JSON.stringify(context)) || window
-            cxt.func = this;
-            const args = Array.from(arguments).slice(1);
-            const res = function () {
-                const allArgs = args.concat(Array.from(arguments));
-                return allArgs.length > 0 ? cxt.func(...allArgs) : cxt.func();
+        Function.prototype.bind = function(context) {
+                const cxt = JSON.parse(JSON.stringify(context)) || window
+                cxt.func = this;
+                const args = Array.from(arguments).slice(1);
+                const res = function() {
+                    const allArgs = args.concat(Array.from(arguments));
+                    return allArgs.length > 0 ? cxt.func(...allArgs) : cxt.func();
+                }
+                delete cxt.func;
+                return res;
             }
-            delete cxt.func;
-            return res;
+            // github
+        Function.prototype.call2 = function(context) {
+            var context = context || window;
+            context.fn = this;
+
+            var args = [];
+            for (var i = 1, len = arguments.length; i < len; i++) {
+                args.push('arguments[' + i + ']');
+            }
+
+            var result = eval('context.fn(' + args + ')');
+
+            delete context.fn
+            return result;
+        }
+        Function.prototype.apply = function(context, arr) {
+            var context = Object(context) || window;
+            context.fn = this;
+
+            var result;
+            if (!arr) {
+                result = context.fn();
+            } else {
+                var args = [];
+                for (var i = 0, len = arr.length; i < len; i++) {
+                    args.push('arr[' + i + ']');
+                }
+                result = eval('context.fn(' + args + ')')
+            }
+
+            delete context.fn
+            return result;
         }
     </script>
 </body>

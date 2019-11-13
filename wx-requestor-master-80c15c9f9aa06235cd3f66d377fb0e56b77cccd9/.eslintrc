@@ -1,0 +1,18 @@
+{
+  "parser": "babel-eslint",
+  "extends": "eslint:recommended",
+  "env": {
+    "browser": true,
+    "jasmine": true,
+    "es6": true
+  },
+  "globals": {
+    "module": true,
+    "require": true,
+    "wx": true,
+    "process": true
+  },
+  "rules": {
+    "no-console": 0
+  }
+}

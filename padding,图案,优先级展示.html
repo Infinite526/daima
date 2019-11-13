@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    /*三道杠*/
+    
+    .icon1 {
+        box-sizing: border-box;
+        display: inline-block;
+        width: 12px;
+        height: 10px;
+        padding: 2px 0;
+        border-top: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        background: currentColor;
+        /*注意如果此处背景颜色属性用缩写的话，需要放到其他背景属性的前面，否则会覆盖前面的属性值（此处为background-clip）为默认值*/
+        background-clip: content-box;
+    }
+    /*双层圆点*/
+    
+    .icon2 {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        padding: 2px;
+        border: 2px solid currentColor;
+        border-radius: 50%;
+        background-color: currentColor;
+        background-clip: content-box;
+    }
+    /*三角形*/
+    
+    .icon3 {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border: 20px solid transparent;
+        border-bottom: 20px solid #f00;
+    }
+    /* 一个元素三种颜色 */
+    
+    .icon4 {
+        box-sizing: content-box;
+        background: #f00;
+        padding: 100px;
+        width: 200px;
+        height: 200px;
+        margin: 100px;
+        border: 20px solid #ff0;
+        border-radius: 50%;
+    }
+    
+    .icon4::after {
+        position: absolute;
+        content: '';
+        width: 200px;
+        height: 200px;
+        background: #f0f;
+        border-radius: 50%;
+    }
+    
+    .icon5 div {
+        color: red;
+    }
+    
+    .icon5 #title {
+        color: yellow;
+    }
+    
+    .icon5 div.title {
+        color: blue;
+    }
+    
+    .classA {
+        color: blue;
+    }
+    
+    .classB {
+        color: red;
+    }
+</style>
+
+<body>
+    <div class='icon1'></div>
+    <div class='icon2'></div>
+    <div class='icon3'></div>
+    <div class="icon4"></div>
+    <div class="icon5">
+        <div class='title' id='title'>abc</div>
+    </div>
+    <!--样式展示和元素中类名前后无关，和在样式表中写的顺序有关 -->
+    <p class='classB classA'>123</p>
+</body>
+
+</html>

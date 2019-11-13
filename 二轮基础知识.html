@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .kailong {
+            width: 0;
+            height: 0;
+            border-right: 50px solid transparent;
+            border-left: 50px solid transparent;
+            /* border-top: 50px solid transparent; */
+            border-bottom: 50px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="kailong"></div>
+    <script>
+        // for (var i = 0; i < 5; i++) {
+        //     (function (i) {
+        //         setTimeout(function () {
+        //             console.log(i)
+        //         }, i * 1000)
+        //     })(i)
+        // }
+
+        // for(var i=0;i<5;i++){
+        //     setTimeout((function(i){
+        //         return function(){
+        //             console.log(i)
+        //         }
+        //     })(i),i*1000)
+        // }
+
+        var data = [];
+        for (var i = 0; i < 3; i++) {
+            data[i] = (function (i) {
+                return function () {
+                    console.log(i)
+                }
+            })(i)
+        }
+        data[0]();
+        data[1]();
+        data[2]();
+
+        //new 的过程和实现
+        function create(cont, ...args) {
+            var obj = new Object();
+            Object.setPrototypeOf(obj, cont.prototype);
+            var result = cont.apply(obj, args);
+            return typeof result === "Object" ? result : obj;
+        }
+
+        function Person(name, age) {
+            this.name = name;
+            this.age = age;
+            console.log(this.name + "+++" + this.age)
+        }
+        create(Person, '周星星', 52)
+
+        // call 
+        Function.prototype.call2 = function (context) {
+            var context = context || window;
+            context.fn = this;
+            var res = [...arguments].slice(1);
+            var result = context.fn(...res);
+            delete context.fn;
+            return result;
+        }
+
+        // apply
+        Function.prototype.apply2 = function (context, arr) {
+            var context = context || window;
+            context.fn = this;
+            var result;
+            if (!arr) {
+                result = context.fn()
+            } else {
+                result = context.fn(...[arr])
+            }
+            delete context.fn;
+            return result;
+        }
+        // bind 
+        Function.prototype.bind2 = function (context) {
+            var args = [...arguments].splice(1);
+            var self = this;
+            return function () {
+                var _args = [...args, ...arguments];
+                self.apply(context, _args);
+            }
+        }
+
+        var foo = {
+            value: 1
+        };
+
+        function bar(age, name) {
+            console.log(this.value);
+            console.log(age);
+            console.log(name)
+        }
+
+        // 返回了一个函数
+        var bindFoo = bar.bind2(foo, 100);
+
+        bindFoo('张三');
+
+        // 防抖手写
+        function debounce(fn, wait, amediate) {
+            var timer, result;
+            return function () {
+                var self = this;
+                var _args = [...arguments];
+                if (timer) clearTimeout(timer);
+                if (amediate) {
+                    // 立即执行
+                    var callNow = !timer;
+                    timer = setTimeout(function () {
+                        timer = null;
+                    }, wait)
+                    if (call) {
+                        fn.apply(self, _args)
+                    }
+                } else {
+                    setTimeout(function () {
+                        result = fn.apply(self, _args)
+                    }, wait)
+
+                }
+                return result;
+            }
+        }
+
+        // 节流 --->时间戳
+        function throtle(fn, wait) {
+            var pre = 0,
+                result;
+            return function () {
+                var _args = [...arguments];
+                var self = this;
+                var now = +new Date();
+                if (now - pre > wait) {
+                    result = fn.apply(self, _args);
+                    pre = now;
+                }
+                return result;
+            }
+        }
+        //节流 ---> 定时器
+        function throtle2(fn, wait) {
+            var timer, result;
+            return function () {
+                var self = this;
+                var _args = [...arguments];
+                if (!timer) {
+                    timer = setTimeout(function () {
+                        timer = null;
+                    }, wait)
+                    result = fn.apply(self, _args)
+                }
+                return result;
+            }
+        }
+        // 数组去重 ---> indexof
+        function unique(arr) {
+            var result = [];
+            for (let i = 0; i < arr.length; i++) {
+                if (result.indexOf(arr[i]) < 0) {
+                    result.push(arr[i])
+                }
+            }
+            return result;
+        }
+        // 数组去重 ---> filter
+        function unique2(arr) {
+            return arr.filter(function (item, index) {
+                return arr.indexOf(item) === index
+            })
+        }
+
+        // 数组去重 ---> es6
+        var unique3 = (arr) => [...new Set(arr)];
+
+        // 数组去重 ---> 数组里有引用类型 NAN
+        function unique4(arr) {
+            var obj = {};
+            return arr.filter(function (item, index, arr) {
+                console.log(typeof item + JSON.stringify(item))
+                return obj.hasOwnProperty(typeof item + JSON.stringify(item)) ?
+                    false : (obj[typeof item + JSON
+                        .stringify(item)] = true)
+            })
+        }
+
+        // 判断类型
+        var class2type = {};
+        "Boolean Number String Function Array Date RegExp Object Error Null Undefined".split(" ")
+            .map(function (item,
+                index) {
+                class2type['[Object ' + item + ']'] = item.toLowerCase()
+            })
+
+        function type(obj) {
+            return typeof obj === "object" || typeof obj === 'function' ?
+                class2type[Object.prototype.toString.call(obj)] || "object" : typeof obj
+        }
+
+        // 浅拷贝
+        function shallowCopy(obj) {
+            if (typeof obj != 'object') return;
+            var newObj = obj instanceof Array ? [] : {};
+            for (var key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    newObj[key] = obj[key]
+                }
+            }
+            return newObj;
+        }
+        // 深拷贝 除了 function
+        function deepCopy(obj) {
+            return JSON.parse(JSON.stringify(obj))
+        }
+        // 深拷贝 递归
+        function deepCopy2(obj) {
+            if (typeof obj != "object") return;
+            var newObj = obj instanceof Array ? [] : {};
+            for (var key in obj) {
+                if (newObj.hasOwnProperty(key)) {
+                    newObj[key] = typeof obj[key] === "object" ? deepCopy2(obj[key]) : obj[key];
+                }
+            }
+        }
+        //数组求最大值 --->普通
+        function getMax(arr) {
+            var big = arr[0];
+            for (var i = 1; i < arr.length; i++) {
+                big = Math.max(big, arr[i])
+            }
+            return big;
+        }
+        //数组求最大值 --->reduce
+        function getMax2(arr) {
+            return arr.reduce(function (pre, curr) {
+                return Math.max(pre, curr)
+            })
+        }
+        //数组求最大值 --->apply
+        function getMax3(arr) {
+            return Math.max.apply(null, arr)
+        }
+
+        // 数组扁平化 ---递归
+        function flateen(arr) {
+            var result = [];
+            for (var i = 0; i < arr.length; i++) {
+                if (Array.isArray(arr[i])) {
+                    result = result.concat(flateen(arr[i]));
+                } else {
+                    result.push(arr[i])
+                }
+            }
+            return result;
+        }
+        // 数组扁平化 ---reduce
+        function flatten2(arr) {
+            return arr.reduce(function (pre, next) {
+                return pre.concat(Array.isArray(next) ? flatten2(next) : next)
+            }, [])
+        }
+        // map 源码
+        Function.prototype.map = function (fn, context) {
+            let arr = this;
+            let context = context || window;
+            let resultArr = [];
+            for (let i = 0; i < arr.length; i++) {
+                result = fn.call(context, arr[i], i, arr);
+                resultArr.push(result)
+            }
+            return resultArr;
+        }
+
+        //Jq each   可以中止程序
+        function each(arr, fn) {
+            for (let i = 0; i < arr.length; i++) {
+                if (fn.call(arr[i], i, arr[i]) === false) {
+                    break;
+                }
+            }
+        }
+
+        // 函数柯里化
+        function curry(fn, ...args) {
+            var length = fn.length;
+            var args = args || [];
+            return function () {
+                var _args = args.splice(0);
+                _args = [...args, ...arguments];
+                if (_args.length < length) {
+                    return curry.call(this, fn, ..._args);
+                } else {
+                    fn.apply(this, _args)
+                }
+            }
+        }
+
+
+        var fn = curry(function (a, b, c) {
+            console.log([a, b, c]);
+        }, 'a');
+
+        fn("b", "w") // ["a", "b", "c"]
+
+        function Parent(name) {
+            this.name = name;
+            this.colors = ['red', 'blue', 'green'];
+        }
+
+        Parent.prototype.getName = function () {
+            console.log(this.name)
+        }
+
+        function Child(name, age) {
+            Parent.call(this, name);
+            this.age = age;
+        }
+
+        // 关键的三步
+        var F = function () {};
+
+        F.prototype = Parent.prototype;
+
+        Child.prototype = new F();
+
+
+        var child1 = new Child('kevin', '18');
+
+        console.log(child1);
+
+        // 手写Promise
+        class Promise {
+            constructor(executor) {
+                this.state = 'pending';
+                this.value = undefined;
+                this.reason = undefined;
+                this.resolveCallbacks = [];
+                this.rejectCallbacks = [];
+                let resolve = (value) => {
+                    if (this.state === "pending") {
+                        this.state = 'fulfilled'
+                        this.value = value;
+                        resolveCallbacks.forEach(fn => fn());
+                    }
+                }
+
+                let reject = (reason) => {
+                    if (this.state === "pending") {
+                        this.state = 'rejected';
+                        this.reason = reason;
+                        rejectCallbacks.forEach(fn => fn());
+                    }
+                }
+                try {
+                    executor(resolve, reject)
+                } catch (err) {
+                    reject(err)
+                }
+            }
+            then(onFul, onRej) {
+                if (this.state === "fulfilled") {
+                    onFul(this.value)
+                }
+                if (this.state === "rejected") {
+                    onRej(this.reason)
+                }
+                if (this.state === "pending") {
+                    this.resolveCallbacks.push(function () {
+                        onFul(this.value)
+                    })
+                    this.rejectCallbacks.push(() => {
+                        onRej(this.reason)
+                    })
+                }
+            }
+        }
+
+        // instanceof 
+        function instance_of(L, R) {
+            var O = R.prototype;
+            L = L.__pro__;
+            while (true) {
+                if (L === null) return false;
+                if (O === L) return true;
+                L = L.__pro__;
+            }
+        }
+
+        //冒泡排序
+        function sort(arr) {
+            for (var i = 0; i < arr.length - 1; i++) {
+                for (var j = i + 1; j < arr.length; j++) {
+
+                    if (arr[i] > arr[j]) {
+                        var tamp = arr[i];
+                        arr[i] = arr[j]
+                        arr[j] = tamp;
+
+                    }
+                }
+            }
+            return arr
+        }
+        var arr2 = sort([1, 23, 5, 56, 87, 1, 23]);
+        console.log('------>', arr2)
+
+        function Ajax(params) {
+
+        }
+    </script>
+</body>
+
+</html>

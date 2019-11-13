@@ -23,6 +23,34 @@
         };
 
         console.log(object.getNameFunc()()); //"The Window"（在非严格模式下）
+
+        // this
+        var number = 5;
+        var obj = {
+            number: 3,
+            fn: (function() {
+                var number;
+                this.number *= 2;
+                number = number * 2;
+                number = 3;
+                return function() {
+                    var num = this.number;
+                    this.number *= 2;
+                    console.log(num);
+                    number *= 3;
+                    console.log(number);
+                }
+            })()
+        }
+        var myFun = obj.fn;
+        myFun.call(null);
+        // 10
+        // 9
+        obj.fn();
+        // 3
+        // 27
+        console.log(window.number);
+        // 20
     </script>
 </body>
 

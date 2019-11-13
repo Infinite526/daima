@@ -10,15 +10,40 @@
         div {
             background: #0f0;
             height: 200px;
+            font-size: 20px;
+        }
+        /* 2 */
+        
+        .w-h {
+            width: 200px;
+            height: 300px;
+            background: #0f0;
+            font-size: 3em;
+        }
+        
+        .w-h .w-h-son {
+            height: auto;
+            width: 100px;
+            padding-top: 50%;
+            background: #f00;
+            font-size: 2em;
         }
     </style>
 </head>
 
 <body>
-    <!-- 已知如下代码，如何修改才能让图片宽度为 300px ？注意下面代码不可修改 -->
+    <!--1 已知如下代码，如何修改才能让图片宽度为 300px ？注意下面代码不可修改 -->
     <!-- 总结一下吧： 1.css方法 max-width:300px;覆盖其样式； transform: scale(0.625)；按比例缩放图片； width: 300px !important; padding:0 90px; box-sizing: border-box; 
     2.js方法 document.getElementsByTagName("img")[0].setAttribute("style","width:300px!important;") -->
     <img src="1.jpg" style="width:480px!important;">
+
+    <!--2 父元素宽200高300，子元素宽100，高度自适应，设置padding-top：50%，不考虑其他因素，子元素实际高度是多少 -->
+    <div>
+        <div class='w-h'>
+            <div class='w-h-son'>121212</div>
+        </div>
+    </div>
+
 </body>
 
-</html>y
+</html>

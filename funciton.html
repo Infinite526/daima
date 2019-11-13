@@ -10,28 +10,47 @@
 
 <body>
     <script>
-        var a = 10;
-        (function() {
-            console.log(a)
-            a = 5
-            console.log(window.a)
-            var a = 20;
-            console.log(a)
-        })()
-        // VM54:3 undefined
-        // VM54:5 10
-        // VM54:7 20
-        var a = 10;
-        (function() {
-            console.log(a)
-            a = 5
-            console.log(window.a)
-            a = 20;
-            console.log(a)
-        })()
-        // VM59:3 10
-        // VM59:5 5
-        // VM59:7 20
+        // var a = 10;
+        // (function() {
+        //     console.log(a)
+        //     a = 5
+        //     console.log(window.a)
+        //     var a = 20;
+        //     console.log(a)
+        // })()
+        // // VM54:3 undefined
+        // // VM54:5 10
+        // // VM54:7 20
+        // var a = 10;
+        // (function() {
+        //     console.log(a)
+        //     a = 5
+        //     console.log(window.a)
+        //     a = 20;
+        //     console.log(a)
+        // })()
+        // // VM59:3 10
+        // // VM59:5 5
+        // // VM59:7 20
+
+
+
+        // 实现效果
+        // result = {
+        //     4: ['java', 'ruby'],
+        //     2: ['js'],
+        //     6: ['python'],
+        // }
+        var arr = ["java", "js", "ruby", "python"];
+        var result = {};
+        for (let i of arr) {
+            if (result[i.length] instanceof Array) {
+                result[i.length].push(i);
+            } else {
+                result[i.length] = [i];
+            }
+        }
+        console.log(result)
     </script>
 </body>
 

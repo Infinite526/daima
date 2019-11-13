@@ -35,7 +35,7 @@
         // container.onmousemove = getUserAction;
         function debounce(fn, delay, immediate) {
             let timer;
-            return function () {
+            return function() {
                 if (immediate) {
                     fn.apply(this, arguments)
                 }
@@ -46,7 +46,7 @@
             }
         }
         // container.addEventListener('mousemove', debounce(getUserAction, 500));
-        
+
         // 简单的防抖动函数
         // 实际想绑定在 scroll 事件上的 handler
         function realFunc() {
@@ -57,16 +57,16 @@
         window.addEventListener('scroll', debounce(realFunc, 500));
         // 没采用防抖动
         window.addEventListener('scroll', realFunc);
-    // 节流（只是执行频率减慢了，但是一直执行）
-    // 可以理解为事件在一个管道中传输，加上这个节流阀以后，事件的流速就会减慢。实际上这个函数的作用就是如此，它可以将一个函数的调用频率限制在一定阈值内，例如 1s，那么 1s 内这个函数一定不会被调用两次
-        function throttle(fn,delay){
-            let prev = new Date();
-            return function(){
+        // 节流（只是执行频率减慢了，但是一直执行）
+        // 可以理解为事件在一个管道中传输，加上这个节流阀以后，事件的流速就会减慢。实际上这个函数的作用就是如此，它可以将一个函数的调用频率限制在一定阈值内，例如 1s，那么 1s 内这个函数一定不会被调用两次
+        function throttle(fn, delay) {
+            let prev = 0;
+            return function() {
                 const args = arguments;
-                const now = new Date();
-                if(now - prev > delay){
-                    fn.apply(this,args);
-                    prev = new Date();
+                const now = +new Date();
+                if (now - prev > delay) {
+                    fn.apply(this, args);
+                    prev = now;
                 }
             }
         }

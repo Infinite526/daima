@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 作用域，静态对象，编译时已经确定
+        // var value = 1;
+
+        // function foo() {
+        //     console.log(value);
+        // }
+
+        // function bar() {
+        //     var value = 2;
+        //     foo();
+        // }
+
+        // bar();
+        // 2
+        var a;
+
+        function a() {
+            console.log(a)
+            a = 20
+            console.log(a)
+        }
+        console.log(a)
+        console.log(a())
+        var json = [{
+            a: 1
+        }, {
+            b: 2
+        }];
+        for (var i = 0; i < json.length; i++) {
+            console.log(i)
+        }
+        // 3  网道中找答案
+        var reg = /abc/g
+        var str = 'abcd';
+        reg.test(str) //true abcd /abc/
+        reg.test(str) //false  bcd /abc/
+            // 4
+        var p1 = {
+            name: 'john',
+            age: 30
+        };
+        var p2 = {
+            name: 'lucy',
+            age: 20
+        };
+
+        function modify1(obj) {
+            obj = {
+                name: 'backus'
+            }
+        }
+
+        function modify2(obj) {
+            obj.name = 'backus'
+        }
+        modify1(p1) // obj = p1   obj = {name: 'backus'}
+        modify2(p2) // obj = p2   引用同一个对象
+        console.log(p1) // { name: 'john',age: 30};
+        console.log(p2) // { name: 'backus',age: 30};
+
+        // 
+        var add = function(x, r) {
+            if (arguments.length == 1) {
+                return function(y) {
+                    return x + y;
+                };
+            } else {
+                return x + r;
+            }
+        };
+        console.log(add(2)(5));
+        console.log(add(2, 5));
+
+        var length = 1;
+
+        function fn() {
+            console.log(this.length);
+        }
+
+        var obj = {
+            length: 2,
+            method1: function(fn) {
+                fn(); //直接调用this指向window，严格模式指向undefined
+                fn.call(this);
+                arguments[0]()
+            },
+            method2: function() {
+                console.log(1, this)
+                document.addEventListener('click', evt => this.method3(evt.type), false);
+            },
+            method3: function(type) {
+                console.log(2, this)
+                console.log(type + ":" + this.length);
+            }
+        }
+
+        obj.method1(fn) //1,2,1
+        obj.method2(fn) //点击页面后输出  2
+
+        // 
+        var foo = 1
+        console.log(foo)
+
+        function bar() {
+            //var foo = 0 相当于先 var foo = undefined foo = 10  查找值时先从自己作用域找再向上找当自己有时就不想上找了
+            if (!foo) {
+                var foo = 10 //  10
+                    // var foo1 = 10 //1
+            }
+            console.log(foo)
+        }
+        bar()
+            // 去重返回重复元素  indexOf查找元素，找到返回第一次出现的位置，否则返回-1
+        function remove(arr) {
+            let returnArr = [];
+            let returnArr1 = [];
+            for (let i = 0; i < arr.length; i++) {
+                if (returnArr.indexOf(arr[i]) == -1) {
+                    returnArr.push(arr[i])
+                } else if (returnArr1.indexOf(arr[i]) == -1) {
+                    returnArr1.push(arr[i])
+                }
+            }
+            return returnArr1
+        }
+        let arr = [1, 2, 3, 4, 2, 1, 3, 1, 21, 2, 3]
+        remove(arr)
+
+        function qc(arr) {
+            let obj = {};
+            let resultArr = []; // 返回重复元素
+            let qfObj = {};
+            arr.forEach((ele, index) => {
+                if (arr.indexOf(ele) != index && resultArr.indexOf(ele) == -1) {
+                    resultArr.push(ele)
+                }
+                if (qfObj[ele]) {
+                    qfObj[ele]++;
+                } else {
+                    qfObj[ele] = 1;
+                }
+            })
+            obj.resultArr = resultArr;
+            obj.qfObj = qfObj;
+            return obj
+        }
+        qc(arr)
+
+        // 
+        // 实现效果
+        // var arr = ['java', 'js', 'ruby', 'python'];
+
+        // result = {
+        //     4: ['java', 'ruby'],
+        //     2: ['js'],
+        //     6: ['python'],
+        // }
+
+        let arr1 = ["java", "js", "ruby", "python"];
+        let result = {};
+        for (let i of arr1) {
+            if (result[i.length] instanceof Array) {
+                result[i.length].push(i);
+            } else {
+                result[i.length] = [i];
+            }
+        }
+
+        // 函数柯里化
+        function add() {
+            // 第一次执行时，定义一个数组专门用来存储所有的参数
+            var _args = [].slice.call(arguments);
+
+            // 在内部声明一个函数，利用闭包的特性保存_args并收集所有的参数值
+            var adder = function() {
+                    var _adder = function() {
+                        // [].push.apply(_args, [].slice.call(arguments));
+                        _args.push(...arguments);
+                        return _adder;
+                    };
+
+                    // 利用隐式转换的特性，当最后执行时隐式转换，并计算最终的值返回
+                    _adder.toString = function() {
+                        return _args.reduce(function(a, b) {
+                            return a + b;
+                        });
+                    }
+
+                    return _adder;
+                }
+                // return adder.apply(null, _args);
+            return adder(..._args);
+        }
+
+        var a = add(1)(2)(3)(4); // f 10
+        var b = add(1, 2, 3, 4); // f 10
+        var c = add(1, 2)(3, 4); // f 10
+        var d = add(1, 2, 3)(4); // f 10
+
+        // 可以利用隐式转换的特性参与计算
+        console.log(a + 10); // 20
+        console.log(b + 20); // 30
+        console.log(c + 30); // 40
+        console.log(d + 40); // 50
+
+        // 也可以继续传入参数，得到的结果再次利用隐式转换参与计算
+        console.log(a(10) + 100); // 120
+        console.log(b(10) + 100); // 120
+        console.log(c(10) + 100); // 120
+        console.log(d(10) + 100); // 120
+
+        // 封装map
+        Array.prototype._map = function(fn, context) {
+            var temp = [];
+            if (typeof fn == 'function') {
+                var k = 0;
+                var len = this.length;
+                // 封装for循环过程
+                for (; k < len; k++) {
+                    // 将每一项的运算操作丢进fn里，利用call方法指定fn的this指向与具体参数
+                    temp.push(fn.call(context, this[k], k, this))
+                }
+            } else {
+                console.error('TypeError: ' + fn + ' is not a function.');
+            }
+
+            // 返回每一项运算结果组成的新数组
+            return temp;
+        }
+
+        var newArr = [1, 2, 3, 4]._map(function(item) {
+                return item + 1;
+            })
+            // [2, 3, 4, 5]
+
+
+        // 封装一个get请求的方法
+        function getJSON(url) {
+            return new Promise(function(resolve, reject) {
+                var XHR = new XMLHttpRequest();
+                XHR.open('GET', url, true);
+                XHR.send();
+
+                XHR.onreadystatechange = function() {
+                    if (XHR.readyState == 4) {
+                        if (XHR.status == 200) {
+                            try {
+                                var response = JSON.parse(XHR.responseText);
+                                resolve(response);
+                            } catch (e) {
+                                reject(e);
+                            }
+                        } else {
+                            reject(new Error(XHR.statusText));
+                        }
+                    }
+                }
+            })
+        }
+
+        getJSON(url).then(resp => console.log(resp));
+        // 
+        var str = 'mything'
+        console.log('value is' + (str === 'mything') ? 'something' : 'nothing')
+            // 
+        console.log([1 < 2 < 3, 3 > 2 > 1]) //true   false  3>2>1时，我们可以将其分为两步，首先是3>2返回是true，也就等价于1,所以后面的比较就变成1>1结果自然是false了。
+            // 同理，1<2是true，等价于1，1<3也是true。
+            //计算字符串表达式" '1+2*3+4-5'的结果值
+        '1+2*3+4-5'
+        // 
+        var name = 'world'
+            (function() {
+                if (typeof name === 'undefined') {
+                    var name = 'jack'; //var name = undefined;name = 'jack' 
+                    console.log('hi' + name)
+                } else {
+                    console.log('hello' + name)
+                }
+            })()
+            // hijack
+
+        // 获取abcdefg中的efg
+        var a = 'abcdefg';
+        a.slice(4); //开始结束位置，可以为负数
+        a.substr(4); //开始结束位置，不可以为负数
+        a.substring(4); //开始位置，截取几个
+        // 
+        async function async1() {
+            console.log('async1 start')
+            await async2()
+            console.log('async1 end')
+        }
+        async function async2() {
+            console.log('async2')
+        }
+        console.log('script start')
+        setTimeout(function() {
+            console.log('setTimeout')
+        }, 0)
+        async1();
+        new Promise(function(resolve) {
+            console.log('promise1')
+            resolve();
+        }).then(function() {
+            console.log('promise2')
+        })
+        console.log('script end')
+            // VM143: 9 script start
+            // VM143: 2 async1 start
+            // VM143: 7 async2
+            // VM143: 15 promise1
+            // VM143: 20 script end
+            // VM143: 4 async1 end
+            // VM143: 18 promise2
+            // undefined
+            // VM143: 11 setTimeout
+            // async 函数返回一个 Promise 对象，当函数执行的时候，一旦遇到 await 就会先返回，等到触发的异步操作完成，再接着执行函数体内后面的语句。
+
+        // f是否可以同时拿到a和b两个方法，为什么
+        // 会，先a后b
+        var F = function() {};
+        Object.prototype.a = function() {
+            console.log('a')
+        }
+        Function.prototype.b = function() {
+            console.log('b')
+        }
+        var f = new F()
+
+        // 输出结果
+        let getNumber = (arg) => {
+            return new Promise(function(reslove, reject) {
+                if (arg <= 10) {
+                    console.log(5);
+                    showNumber();
+                    reslove(arg)
+                } else {
+                    console.log(81); //81
+                    showNumber();
+                    reslove(arg)
+                }
+            })
+        }
+
+        function showNumber() {
+            let [x, y, ...z] = ['a'];
+
+            function* number() {
+                yield1;
+                yield2;
+                return 3;
+                yield4;
+                yield5;
+                yield6;
+
+            }
+            let numbersArray = [...numbers()];
+            const map = new Map([
+                ['e', 35]
+            ]);
+            let obj = {
+                p1: [
+                    '1'.padStart(numbersArray.length, '1b'), {
+                        y1: 'world'
+                    }
+                ]
+            };
+            let {
+                p1: [x1, {
+                    y1
+                }]
+            } = obj;
+            setTimeout(() => {
+                setTimeout(() => {
+                    console.log(53)
+                }, 0)
+                console.log(z);
+                console.log(obj.p1[0]);
+                console.log(map.get('e'))
+            }, 2000)
+        }
+        getNumber(18).then(
+                function(data) {
+                    // console.log('resloved')
+                    console.log(data)
+                },
+                function(reson, data) {
+                    // console.log('rejected')
+                    console.log(data) //undefined
+                }
+            )
+            // 3在不使用loop循环的前提下，创建一个长度为20的数组，并且每个元素的值等于他的下表，然后求出该数组的前5哥元素之和；
+        Array.from(new Array(100)).map((item, index) => index);
+        [...Array(100).keys()];
+        Array.from(Array(100).keys())
+            // 为什么js是单线程却能让ajax异步发送和回调请求
+            // 使用requestAnimationFrame和cancelAnimationFrame制作进度条读取效果
+            // 如何使用闭包实现一个累乘函数
+            // 提升页面加载速度
+            // node是否适合做高并发的互联网应用，理由
+        Function.prototype.a = () => alert(1);
+        Object.prototype.b = () => alert(2);
+
+        function A() {};
+        const a = new A();
+        a.a(); //a.a is not a function  a中没有a函数，a()就没有
+        a.b(); //a中有b函数，原型链
+    </script>
+</body>
+
+</html>

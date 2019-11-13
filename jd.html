@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1
+        for (var i = 0; i < 5; i++) {
+            setTimeout(function() {
+                console.log(i)
+            }, 1000)
+        }
+        console.log(i++)
+            //5  6,6,6,6,6
+            //2 
+        setTimeout(function() {
+            console.log('a')
+        }, 0)
+        new Promise((resolve) => {
+            console.log('b')
+            resolve()
+        }).then(() => {
+            console.log('c')
+        })
+        Promise.resolve().then(() => {
+            console.log('d')
+        })
+        console.log('e') //b,e,c,d,a
+
+        //3
+        function Foo() {
+            Foo.a = function() {
+                console.log(1)
+            }
+            this.a = function() {
+                console.log(2)
+            }
+        }
+        Foo.prototype.a = function() {
+            console.log(3)
+        }
+        Foo.a = function() {
+            console.log(4)
+        }
+        Foo.a();
+        let obj = new Foo();
+        obj.a();
+        Foo.a();
+
+        // 实现一个js原型继承
+        // 任意写一个js设计模式
+        // 任意写一种排序算法
+    </script>
+</body>
+
+</html>
